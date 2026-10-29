@@ -51,10 +51,10 @@ You are building **one company** across many milestones and projects. Each top-l
 
 ## Current status of the template
 
-> 💡 This repository currently provides a **base folder structure and documentation skeleton** only. It does not include runnable apps or global scripts yet.
+> 💡 This repository started as a **base folder structure and documentation skeleton**. So far, only the **Hito 1 public website** (Nexova) is implemented, in [`uis/website/`](./uis/website/README.md).
 >
-> - `CONTEXT.md` is a placeholder and must be replaced with your assigned company context.
-> - There is no root `AGENTS.md` yet.
+> - **Run the website** (also works in Codespaces), from the repo root: `npx -y serve@14.2.6 uis/website -l 3000 --no-clipboard`, then open <http://localhost:3000>.
+> - `CONTEXT.md` holds the Nexova company context. Guidance for coding agents lives in `CLAUDE.md` and `AGENTS.md`.
 > - Shared package metadata exists in `packages/shared/package.json` (`@repo/shared-types`), but no workspace runner is configured at root.
 
 ---
