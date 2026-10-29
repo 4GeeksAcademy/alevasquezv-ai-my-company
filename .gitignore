@@ -1,0 +1,26 @@
+# OS / editor
+.DS_Store
+.idea/
+
+# Secretos (en los siguientes hitos habrá API keys de LLMs)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+dist/
+.next/
+*.tsbuildinfo
+
+# Claude Code: configuración personal, no compartida
+.claude/settings.local.json
+CLAUDE.local.md
