@@ -49,6 +49,11 @@ Fuera de una terminal interactiva, Node imprime la salida de las pruebas en form
   `bg-linear-to-r`). Un espacio perdido al editar fusiona dos clases en una inexistente. `npm run check:classes` lo detecta.
 - `serve` sin `serve.json` muestra el listado de la carpeta en `/` y redirige `/application.html` a `/application`;
   `uis/website/serve.json` corrige ambas cosas.
+- **Medir sobre la URL pública de un Codespace:** GitHub muestra a todo visitante nuevo su aviso «Codespaces Access
+  Port», así que Lighthouse (y, sin verificar, PageSpeed Insights) mide ese aviso y no el sitio. Desde la terminal, envía
+  la cabecera `X-Tunnel-Skip-AntiPhishing-Page: true` (`--extra-headers` en Lighthouse); en el navegador, usa incógnito y
+  pulsa *Continue*. GitHub también añade `X-Robots-Tag: noindex, nofollow`: el SEO queda en 60–63 (solo falla «Page is
+  blocked from indexing») frente a 100 en local, y no se corrige desde el código.
 - `packages/shared/package.json` declara `main` y `types` como `index.ts`, pero el archivo real es
   `packages/shared/types/index.ts`: `@repo/shared-types` no resolverá hasta corregir una de las dos cosas.
 - Los READMEs de `packages/` y `shared/` mencionan una carpeta `apps/` que no existe; es `uis/`.

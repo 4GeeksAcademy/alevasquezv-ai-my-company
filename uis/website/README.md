@@ -25,11 +25,39 @@ se puede abrir con doble clic, sin servidor.
 
 1. En GitHub: botón **Code → Codespaces → Create codespace** sobre la rama del PR.
 2. En la terminal del Codespace, ejecuta el comando de arriba. El puerto 3000 se reenvía solo.
-3. Pestaña **Ports**, clic derecho en el puerto 3000, **Port Visibility → Public**.
-4. Copia la **Forwarded Address** y pégala en <https://pagespeed.web.dev/>. Si PageSpeed no puede alcanzarla, abre esa
-   misma URL en Chrome y usa **DevTools → Lighthouse**. Guarda la captura para la descripción del PR.
+3. Pestaña **Ports**, clic derecho en el puerto 3000, **Port Visibility → Public** (no "Private to Organization"). No
+   cambies el protocolo a HTTPS: según la documentación de GitHub, un puerto público que pasa a HTTPS vuelve a ser
+   privado. Para comprobarlo, abre la **Forwarded Address** en una ventana de incógnito: no debe pedirte iniciar sesión.
+4. Mide con **DevTools → Lighthouse** en esa misma ventana de incógnito (sin extensiones): pulsa **Continue** en el
+   aviso de GitHub y analiza en móvil. **No uses PageSpeed Insights** (ver abajo). Guarda la captura para la
+   descripción del PR.
 5. El sitio solo responde mientras el Codespace está encendido. Se apaga a los 30 min sin actividad: súbelo en
    <https://github.com/settings/codespaces> (**Default idle timeout**, hasta 4 h) y mantén la terminal abierta.
+
+#### Qué esperar al medir en Codespaces
+
+GitHub hace dos cosas con un puerto público que no vienen de este código:
+
+- **Página de aviso.** A todo visitante nuevo le muestra primero "Codespaces Access Port" (la misma página para cualquier
+  ruta) y solo después deja ver el sitio. Un Lighthouse sin la cookie de ese aviso mide **esa página**, no el sitio:
+  midió 100 / 95 / 92 / 90 (landing, móvil), con fallos que son de GitHub. PageSpeed Insights tampoco tiene la cookie,
+  así que probablemente mide lo mismo (no se pudo verificar: su API pública devolvió error de cuota). Desde la terminal
+  se omite enviando la cabecera `X-Tunnel-Skip-AntiPhishing-Page: true` (`--extra-headers` en Lighthouse).
+- **`X-Robots-Tag: noindex, nofollow`.** Lo añade a todas las respuestas, por eso el SEO baja a 63 en la landing y a 60
+  en el formulario. La única auditoría que falla es "Page is blocked from indexing"; en local el SEO da 100. No se
+  corrige desde el código.
+
+Medición del 29 de octubre de 2026 con Lighthouse 13.6.0 desde la terminal, sin extensiones, sobre la URL pública y con
+esa cabecera:
+
+| Página | Dispositivo | Performance | Accessibility | Best Practices | SEO |
+| --- | --- | --- | --- | --- | --- |
+| Landing | Móvil | 100 | 100 | 100 | 63 |
+| Landing | Escritorio | 100 | 100 | 100 | 63 |
+| Formulario | Móvil | 98 | 100 | 100 | 60 |
+| Formulario | Escritorio | 100 | 100 | 100 | 60 |
+
+El 98 del formulario en móvil es solo el Speed Index (3,8 s).
 
 ## Cambiar estilos
 
@@ -100,6 +128,8 @@ uis/website/
 | Verificación | Resultado |
 | --- | --- |
 | Lighthouse 13 en local (Chrome), móvil y escritorio, ambas páginas | 100 en Performance, Accessibility, Best Practices y SEO en las 4 mediciones |
+| Lighthouse 13 sobre la URL pública de Codespaces, móvil y escritorio, ambas páginas (ver arriba) | Performance 98–100, Accessibility 100, Best Practices 100; SEO 60–63 por la cabecera `X-Robots-Tag: noindex` de GitHub |
+| Comando `npx` de arriba en un Codespace real | Sirve el sitio en el puerto 3000 (confirmado abriéndolo en el navegador) |
 | 153 pruebas unitarias + 17 mutaciones del código detectadas por las pruebas | OK |
 | 75 comprobaciones del formulario en el navegador (reglas, mensajes literales, corrección en vivo, limpiar, envío vacío y válido) | OK |
 | Recorrido solo con teclado (Tab real): 25 paradas en orden lógico, todas con foco visible, enlace de salto funcional | OK |
@@ -108,5 +138,4 @@ uis/website/
 | HTML con `html-validate` (salvo `role="list"`, `for` junto a etiqueta envolvente y teléfonos con espacios) | OK |
 
 **No verificado:** lector de pantalla real (VoiceOver/NVDA), Safari y Firefox (solo se probó en Chromium), y
-PageSpeed Insights sobre la URL pública de Codespaces (depende de tu Codespace; las cifras de arriba son locales y
-sin la latencia del proxy).
+PageSpeed Insights en su web (mediría el aviso de GitHub y no el sitio; su API pública devolvió error de cuota).
