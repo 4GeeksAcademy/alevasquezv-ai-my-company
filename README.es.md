@@ -51,10 +51,10 @@ Estás construyendo **una sola empresa** a lo largo de muchos hitos y proyectos.
 
 ## Estado actual de la plantilla
 
-> 💡 Actualmente el repositorio ofrece solo una **estructura base de carpetas y documentación**. Todavía no incluye aplicaciones ejecutables ni scripts globales en la raíz.
+> 💡 El repositorio empezó como una **estructura base de carpetas y documentación**. Por ahora solo está implementado el **sitio web público del Hito 1** (Nexova), en [`uis/website/`](./uis/website/README.md).
 >
-> - `CONTEXT.md` es un placeholder y debe sustituirse por el contexto de la empresa asignada.
-> - No existe todavía un `AGENTS.md` en la raíz.
+> - **Ejecutar el sitio** (también funciona en Codespaces), desde la raíz del repo: `npx -y serve@14.2.6 uis/website -l 3000 --no-clipboard` y abre <http://localhost:3000>.
+> - `CONTEXT.md` contiene el contexto de Nexova. La guía para agentes de código está en `CLAUDE.md` y `AGENTS.md`.
 > - Existe metadata del paquete compartido en `packages/shared/package.json` (`@repo/shared-types`), pero aún no hay runner de workspace en raíz.
 
 ---
