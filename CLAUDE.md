@@ -8,15 +8,17 @@ Monorepo de proyecto transversal del curso de AI Engineering de 4Geeks Academy, 
 `ai-engineering-company-project-monorepo` (remoto `4GeeksAcademy/alevasquezv-ai-my-company`, rama `main`).
 Se construye **una sola empresa ficticia, Nexova Solutions** (consultora de RR. HH., Valencia + Miami), a lo largo
 de hitos: Web, Programación, Backend, Telemetría, RAG, Agentes, Workflows y Tiempo real. El usuario da las
-instrucciones de cada hito en la conversación. Hoy solo está implementado el **Hito 1: sitio web público**, en
-`uis/website/`; el resto del repo sigue siendo estructura de carpetas y READMEs.
+instrucciones de cada hito en la conversación. Implementados: **Hito 1, sitio web público** (`uis/website/`) y
+**Hito 2, utilidades TypeScript de candidatos y vacantes** (`packages/business-utils/`); el resto del repo sigue siendo
+estructura de carpetas y READMEs.
 
 ## Lee esto antes de trabajar
 
 - [`CONTEXT.md`](./CONTEXT.md): fuente única de verdad del dominio (áreas, responsables, tarifas, SLA, reglas de
   negocio) y lista de **inconsistencias conocidas entre fuentes**. No inventes datos de Nexova; si falta uno, pregunta.
-- El briefing de cada hito vive junto a su código: [`uis/website/BRIEFING.md`](./uis/website/BRIEFING.md) (Hito 1).
-  **No lo modifiques** (la entrega exige que esté intacto). El copy, los campos del formulario y los mensajes de error
+- El briefing de cada hito vive junto a su código: [`uis/website/BRIEFING.md`](./uis/website/BRIEFING.md) (Hito 1) y
+  [`packages/business-utils/BRIEFING.md`](./packages/business-utils/BRIEFING.md) (Hito 2, con las firmas exactas de las
+  funciones). **No lo modifiques** (la entrega exige que esté intacto). El copy, los campos del formulario y los mensajes de error
   y de éxito son **literales**: impleméntalos tal cual, no los reescribas.
 - [`company-choice.md`](./company-choice.md): por qué el usuario eligió Nexova y su idea de proyecto: un agente que
   consolida datos de cada área (validando lo que falte) en un data warehouse que alimenta un **dashboard ejecutivo
@@ -24,7 +26,8 @@ instrucciones de cada hito en la conversación. Hoy solo está implementado el *
 
 ## Comandos
 
-Todo el código ejecutable está en `uis/website/` (Node 22; no hay linter configurado). Desde la raíz del repo:
+El código ejecutable está en `uis/website/` y `packages/business-utils/` (Node 22; no hay linter configurado). Desde la
+raíz del repo:
 
 ```bash
 npx -y serve@14.2.6 uis/website -l 3000 --no-clipboard   # ejecutar el sitio (funciona igual en Codespaces)
@@ -39,11 +42,23 @@ npm run check          # recompila el CSS, corre las pruebas y verifica que cada
 node --test --test-name-pattern="teléfono" tests/validation.test.js   # un solo grupo de pruebas
 ```
 
+Desde `packages/business-utils/` (la primera vez, `npm install`):
+
+```bash
+npm run typecheck      # tsc --noEmit (TypeScript 7)
+npm test               # pruebas con node:test ejecutadas por tsx
+npm run demo           # cada función con los datos de ejemplo del briefing
+npx tsx --test --test-name-pattern="scoreSkills" tests/transformations.test.ts   # un solo grupo
+```
+
 Fuera de una terminal interactiva, Node imprime la salida de las pruebas en formato TAP (cientos de líneas): filtra con
 `| grep -E '^# (tests|pass|fail)'`. Lighthouse: `npx -y lighthouse@13.6.0 http://localhost:3000/ --preset=desktop`
 (en móvil, sin `--preset`) con el sitio en marcha.
 
 ### Trampas conocidas
+
+- **`node --test` marca como `cancelled`, no como `fail`, una prueba colgada** (por ejemplo, una búsqueda binaria que
+  no avanza sus límites). Al revisar resultados mira ambos contadores.
 
 - **Tailwind descarta en silencio una clase mal escrita** o con nombre de la v3 (`bg-gradient-to-r` ya no existe: es
   `bg-linear-to-r`). Un espacio perdido al editar fusiona dos clases en una inexistente. `npm run check:classes` lo detecta.
@@ -90,6 +105,12 @@ Una sola empresa, una carpeta por responsabilidad. Lo que no se ve desde un solo
     JS salvo como cadenas literales completas (Tailwind lee `validation.js` como texto).
   - **CSS precompilado y commiteado.** `assets/tailwind.css` es generado; `src/input.css` usa `source(none)` más
     `@source` explícitos, así que **un HTML nuevo no se escanea hasta añadirlo ahí**. Se escribe sintaxis de Tailwind v4.
+
+- **`packages/business-utils` (TypeScript, módulos ES).** Funciones puras sin APIs de Node fuera de `src/demo.ts`, para
+  que también corran en el navegador. Las firmas son las literales de su `BRIEFING.md`; los huecos del briefing (topes del
+  scoring, salario bajo el mínimo, empates) están decididos y documentados en su README: cámbialos ahí y en las pruebas a la
+  vez. Las comparaciones de habilidades pasan siempre por `normalizeSkill`, y el orden de seniority e inglés sale de
+  `SENIORITY_LEVELS` y `ENGLISH_LEVELS` en `src/types/models.ts`.
 
 ## Convenciones y reglas del proyecto
 

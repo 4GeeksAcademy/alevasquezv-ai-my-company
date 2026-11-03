@@ -75,6 +75,17 @@ de los 2010 y múltiples hojas de cálculo que actúan como sistemas de gestión
 - El formulario es solo para **profesionales que buscan empleo**, no para empresas que quieren contratar servicios; incluye un mensaje visible que redirige a `contacto@nexova.com`.
 - Contacto público: `contacto@nexova.com` · Valencia +34 960 123 456 · Miami +1 305 555 0191.
 
+## Hito 2 — Utilidades TypeScript de candidatos y vacantes
+
+- **Responsable:** Javier Almeida, Gerente de Operaciones. Pide la lógica base del futuro motor de scoring y matching de
+  candidatos (filtrar, buscar, puntuar, rankear, reportar y validar), sin interfaz.
+- **Especificación completa y textual** (interfaces `Candidate`, `Vacancy` y `SelectionProcess`, firmas de las 20
+  funciones, reglas de validación, algoritmo de scoring y datos de ejemplo):
+  [`packages/business-utils/BRIEFING.md`](./packages/business-utils/BRIEFING.md). Implementado en
+  [`packages/business-utils/`](./packages/business-utils/README.md).
+- Los datos de ejemplo del briefing son ficticios (teléfonos con prefijo chileno +56 aunque las ciudades sean Valencia
+  y Miami); se usan tal cual.
+
 ## Inconsistencias conocidas entre fuentes (resolver con el usuario antes de depender de ellas)
 
 1. **Ubicación de Nexova.** La plantilla de 4Geeks (placeholder de `CONTEXT.md`) describía a Nexova como "Chile + Argentina". **Los briefings entregados dicen Valencia (España) + Miami (EE. UU.)** y es lo que rige aquí.
