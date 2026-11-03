@@ -1,0 +1,18 @@
+{
+  "name": "@repo/business-utils",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Utilidades TypeScript de Nexova para candidatos, vacantes y procesos de selección (Hito 2)",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "demo": "tsx src/demo.ts",
+    "check": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}
